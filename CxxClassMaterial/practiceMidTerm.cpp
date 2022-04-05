@@ -15,9 +15,10 @@ using namespace std;
 // #include “Helper.H”
 // #ifndef HELPER_H //preprocessor directives that prevents reinitializing the same class
 // #define HELPER_H
-// #endif
-// Helper(){
+// class Helper(){
+    //...
 // }
+// #endif
 
 // #6) const int ISIZE= 10;
 // 	string names[ISIZE];
@@ -25,13 +26,13 @@ using namespace std;
 // #7) int myArray[5][6][7]
 // Write the function header for the function printArr  to receive the array and print its contents
 
-void printArray(int arr[5][6][7])
+void printArray(int arr[][6][7], int size)
 {
-    for (int i = 0; i < 7; ++i)
+    for (int i = 0; i < size; ++i)
     {
-        for (int j = 0; j < 6; ++j)
+        for (int j = 0; j < 7; ++j)
         {
-            for (int k = 0; k < 5; ++k)
+            for (int k = 0; k < 6; ++k)
             {
                 cout << "[" << i << "][" << j << "][" << k << "]" << arr[i][j][k] << endl;
             }
@@ -81,26 +82,29 @@ public:
     // double operator+(double distance);
     // int operator-();
 
+    Test() : Test(NULL, 0, 0){}; //
+
     // class method definitions
     Test(const string *driver, const double distance, const int count)
     {
         this->driver = new string;
+        *this->driver= *driver;
         this->count = count;
         this->distance = distance;
     }
     // copy constructor
-    Test(const Test &obj)
+    Test(const Test& obj)
     {
-        count = obj.count;
-        distance = obj.distance;
-        // driver = new string;
-        driver = obj.driver;
+        this->count = obj.count;
+        this->distance = obj.distance;
+        this->driver = new string;
+        *this->driver = *obj.driver;
          // copy the value;
     }
     // destructor to deallocate the dyamnic memory;
     ~Test()
     {
-        delete[] driver;
+        delete driver;
     }
     // double, string, and int conversion constructors
     double distance1(double distance){};
@@ -112,6 +116,13 @@ public:
     //     return distance1();
     // }
     
+    void Test :: setDriver(string *driver){
+        *this->driver = *driver;
+
+    }
+    const string* Test :: getDriver() const{
+        return driver;
+    }
     // insertion operator to print all three values
     friend ostream &operator << (ostream &output, const Test &t){
         output << "TEST INSTANCE:" << t.distance<<  t.driver << t.count << endl;
@@ -129,38 +140,39 @@ public:
     double operator+(double distance)
     {
         this->distance += distance;
-        // return distance;
+        return distance; //if this was a double it would return really depends on the question 
     }
-    int operator-()
+    Test& operator--()
     {
         this->count--;
-        // return count;
+        return *this;
     }
+    const string * getDriver();
 };
 int main()
 {
     const int ISIZE = 210;
     int myArray[5][6][7] = {};
 
-    printArray(myArray);
+    printArray(myArray, ISIZE);
 
-    // Point p1;
-    // p1.x = 5;
-    // p1.y = 3;
+    Point p1;
+    p1.x = 5;
+    p1.y = 3;
 
-    // Point p2;
-    // p2.x = 10;
-    // p2.y = 15;
+    Point p2;
+    p2.x = 10;
+    p2.y = 15;
 
-    Line first;
+   
+
+ Line first;
     first.startPoint.x = 5;
     first.endPoint.x = 10;
     first.startPoint.y = 3;
     first.endPoint.y = 15;
-
-    shift(first.startPoint);
-
     shift(first.endPoint);
+    shift(first.startPoint);
 
     // -------------------- q9
     int x[5] = {10, 11, 12, 13};
@@ -184,12 +196,32 @@ int main()
     cout << *ptr << endl;   // 12
     cout << ptr[0] << endl; // 12
 
-    //Test test1[50];
+    Test test1[50];
     // Test test1;
 
 
-    //cout << "enter values for the instance of the array: "<<endl;
-       
+    cout << "enter values for the instance of the array: " << endl;
+    
+    Test array[50];
+    for (Test &test : array){
+        cout << "enter values for the instance of the array: " << endl;
+        string driver;
+        cin >> driver;
+        test.setDriver(&driver);
+        cout << *test.getDriver() <<endl;
+    }
+    for (Test test : array)
+        cout << *test.getDriver() <<endl;
 
+    //create an instance using dyanmic memory 
+    Test *test = new Test();
+    //(*test).setDriver(&driver);
+    // test->setDriver(&driver);
+
+    //create an instance of type tEST
+    Test test2;
+    //test2.setDriver(&driver);
+
+    delete test;
     
 }
