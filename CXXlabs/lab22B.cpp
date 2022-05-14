@@ -8,16 +8,18 @@ private:
     int *id;
 
 public:
-    Item();
+    // Item();
+    Item(){*this->id = 0; }
     Item(int id);
     ~Item();
     Item(const Item &obj);
     int getId() const;
+    int x() { return *this->id; }
     Item& operator=(const Item &other);
-    Item& operator++(); //pre
-    Item& operator--(); //pre
-    friend Item operator++(Item& Item, int i); // post
-    friend Item operator--(Item& Item,int i);//post
+    Item& operator++(); //prefix
+    Item& operator--(); //prefix
+    friend Item operator++(Item&i, int); // post
+    friend Item operator--(Item&i, int);//post
 };
 
 Item ::Item(int id)
@@ -50,24 +52,27 @@ Item& Item :: operator=(const Item &other)
 //     return *this; // if this was a double it would return really depends on the question
 // }
 Item& Item :: operator++(){
-    return *this;
+    ++*this->id;
+    return  *this; //100
 }
-// Item& Item :: operator--(int i){
-//     *this->id -= i;
-//     return *this;
-// }
 
 Item& Item :: operator--(){
-    return *this;
+    --*this->id;
+    return *this; //100
 }
 
-Item operator--(Item& Item, int i){
-  Item.id -=i;
-  return i;
-}
-Item operator++(Item& Item, int i){
- Item.id +=i;
+Item operator--(Item& i, int )
+{   
+    i.id--;
     return i;
+    
+}
+
+
+Item operator++(Item& i, int )
+{
+    i.id++;
+   return i;
 }
 
 int main()
@@ -92,10 +97,11 @@ int main()
   cout << "Part III" << endl;
    Item item4(100);
 
-  cout << (++item4).getId() << endl;
-  cout << (--item4).getId() << endl;
-  cout << (item4++).getId() << endl;
-  cout << (item4--).getId() << endl;
-
+  cout <<" this is item ++" << (++item4).getId() << endl;
+  cout << " this is item --" << (--item4).getId() << endl;
+  cout << " this is item ++ "<<(item4++).getId() << endl; // im getting zero for this.
+  cout << " this is item --" <<(item4--).getId() << endl;
+  cout << item4.getId() << endl;
+ 
   return 0;
 }
